@@ -1,0 +1,14 @@
+backend/config.php
+backend/config/*.php
+!backend/config/config.example.php
+backend/logs/*
+!backend/logs/.gitkeep
+vendor/
+node_modules/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+Thumbs.db
+.browser-review/
