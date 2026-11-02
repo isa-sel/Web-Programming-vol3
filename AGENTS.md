@@ -27,23 +27,34 @@ The application should allow users to:
 ```text
 frontend/
   index.html
-  css/
-  js/
-  templates/
+  assets/
+    css/
+    images/
+    js/
+  views/
+  services/
+  utils/
 
 backend/
-  config.example.php
+  index.php
+  .htaccess
+  config/
+    config.example.php
+  rest/
+    routes/
+    services/
+    dao/
+    middleware/
   sql/
     schema.sql
-  routes/
-    services/
-      dao/
-        middleware/
+  logs/
 
-README.md
-AGENTS.md
 docs/
   AI_LOG.md
+  ERD.md
+
+README.md
+.gitignore
 ```
 
 ## Architecture rules

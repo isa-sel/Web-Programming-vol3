@@ -46,3 +46,20 @@ How it was fixed:
 
 For this milestone, AI was used only as a support tool for structure, documentation, and schema planning. The project architecture and final decisions were reviewed and adjusted manually to match the actual course requirements.
 
+## Milestone 1 structure correction
+
+### Feedback addressed
+
+- The frontend views directory and backend directory structure did not match the course project structure.
+
+### AI assistance
+
+- Compared the repository layout with the supplied Frontend/Backend Project Structure lecture.
+- Reorganized frontend views, styles, and scripts into `frontend/views/` and `frontend/assets/`.
+- Reorganized backend routing, database access, and response middleware into `backend/rest/`, and added the backend entry point and rewrite rules.
+- Updated documentation and all affected asset and view paths.
+
+### Review
+
+- Existing page content and API response behavior were preserved while paths and backend responsibilities were moved.
+- Runtime configuration remains local and ignored by Git; only the example configuration is tracked.

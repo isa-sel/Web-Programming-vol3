@@ -1,8 +1,8 @@
-backend/config.php
-backend/config/*.php
-!backend/config/config.example.php
-backend/logs/*
-!backend/logs/.gitkeep
+/backend/config/*.php
+!/backend/config/config.example.php
+/backend/logs/*
+!/backend/logs/.gitkeep
+/backend/vendor/
 vendor/
 node_modules/
 .env

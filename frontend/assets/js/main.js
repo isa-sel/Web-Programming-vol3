@@ -2,12 +2,12 @@ $(document).ready(function () {
   
   var app = $.spapp({
     defaultView: "home",
-    templateDir: "./" // This is the base directory - templates will be loaded relative to this
+    templateDir: "./"
   });
 
   app.route({
     view: "home",
-    load: "templates/home.html",
+    load: "views/home.html",
     onCreate: function() {
       console.log('Home created!');
     },
@@ -18,7 +18,7 @@ $(document).ready(function () {
 
   app.route({
     view: "teams",
-    load: "templates/teams.html",
+    load: "views/teams.html",
     onCreate: function() {
       console.log('Teams created!');
     },
@@ -29,7 +29,7 @@ $(document).ready(function () {
 
   app.route({
     view: "players",
-    load: "templates/players.html",
+    load: "views/players.html",
     onCreate: function() {
       console.log('Players created!');
     },
@@ -40,7 +40,7 @@ $(document).ready(function () {
 
   app.route({
     view: "matches",
-    load: "templates/matches.html",
+    load: "views/matches.html",
     onCreate: function() {
       console.log('Matches created!');
     },
@@ -51,7 +51,7 @@ $(document).ready(function () {
 
   app.route({
     view: "venues",
-    load: "templates/venues.html",
+    load: "views/venues.html",
     onCreate: function() {
       console.log('Venues created!');
     },
@@ -62,7 +62,7 @@ $(document).ready(function () {
 
   app.route({
     view: "login",
-    load: "templates/login.html",
+    load: "views/login.html",
     onCreate: function() {
       console.log('Login created!');
     },
@@ -73,7 +73,7 @@ $(document).ready(function () {
 
   app.route({
     view: "register",
-    load: "templates/register.html",
+    load: "views/register.html",
     onCreate: function() {
       console.log('Register created!');
     },
@@ -85,7 +85,7 @@ $(document).ready(function () {
   
   app.route({
     view: "standings",
-    load: "templates/standings.html",
+    load: "views/standings.html",
     onCreate: function() {
       console.log('Standings created!');
     },

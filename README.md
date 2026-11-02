@@ -50,7 +50,7 @@ These credentials are for local testing and should be replaced in the final envi
 
 1. Create a MySQL database named `rukometni_centar`.
 2. Import the SQL schema from `backend/sql/schema.sql`.
-3. Copy `backend/config.example.php` to `backend/config.php` and fill in your local database and secret values.
+3. Copy `backend/config/config.example.php` to `backend/config/config.php` and fill in your local database and secret values.
 4. Start the PHP server from the project root or serve the frontend from the `frontend` directory.
 5. Open the app in the browser.
 
@@ -66,21 +66,32 @@ php -S localhost:8000
 ```text
 frontend/
   index.html
-  css/
-  js/
-  templates/
+  assets/
+    css/
+    images/
+    js/
+  views/
+  services/
+  utils/
 backend/
-  config.example.php
+  index.php
+  .htaccess
+  config/
+    config.example.php
+  rest/
+    routes/
+    services/
+    dao/
+    middleware/
   sql/
     schema.sql
-  routes/
-    services/
-      dao/
-        middleware/
+  logs/
 README.md
 AGENTS.md
 docs/
   AI_LOG.md
+  ERD.md
+.gitignore
 ```
 
 ## Milestone 1 checklist
