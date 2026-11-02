@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/../middleware/response.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
@@ -12,6 +12,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 $uri = $_SERVER['REQUEST_URI'] ?? '/';
 $path = parse_url($uri, PHP_URL_PATH) ?? '/';
 $segments = array_values(array_filter(explode('/', strtolower(trim($path, '/'))), static fn ($segment) => $segment !== ''));
+
+if ($segments !== [] && $segments[0] === 'backend') {
+    array_shift($segments);
+}
 
 if ($segments !== [] && $segments[0] === 'api') {
     array_shift($segments);

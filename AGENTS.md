@@ -27,23 +27,43 @@ The application should allow users to:
 ```text
 frontend/
   index.html
-  css/
-  js/
-  templates/
+  assets/
+    css/
+    images/
+    js/
+  views/
+  services/
+  utils/
 
 backend/
-  config.example.php
-  sql/
-    schema.sql
-  routes/
+  index.php
+  .htaccess
+  config/
+    config.example.php
+  rest/
+    routes/
     services/
-      dao/
-        middleware/
+    dao/
+      BaseDao.php
+      RoleDao.php
+      UserDao.php
+      TeamDao.php
+      PlayerDao.php
+      VenueDao.php
+      MatchDao.php
+      StandingDao.php
+    middleware/
+  logs/
 
-README.md
-AGENTS.md
+database/
+  rukometni_centar.sql
+
 docs/
   AI_LOG.md
+  ERD.md
+
+README.md
+.gitignore
 ```
 
 ## Architecture rules
@@ -74,6 +94,8 @@ The project should have at least 5 entities such as:
 - standings
 
 Every entity should support basic CRUD behavior in later milestones.
+
+Milestone 2 database schema and seed data live in `database/rukometni_centar.sql`. Table DAOs extend `backend/rest/dao/BaseDao.php`; database credentials are read from the configuration class in `backend/config/config.example.php` or a private local `backend/config/config.php`.
 
 ## Authentication and authorization
 - JWT must be used for authentication/authorization.
