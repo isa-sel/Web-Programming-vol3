@@ -33,32 +33,32 @@ Relationship summary:
 - One venue hosts many matches
 - One team has many standings records across seasons
 
-## Roles and test accounts
+## Roles and sample accounts
 
-The application is designed around two primary roles:
+The database seed includes three roles and these sample accounts. Passwords are stored as bcrypt hashes.
 
-- Admin
-  - email: admin@rukometnicentar.com
-  - password: admin123
-- User
-  - email: user@rukometnicentar.com
-  - password: user123
-
-These credentials are for local testing and should be replaced in the final environment with secure values.
+| Role | Email | Password |
+|---|---|---|
+| Admin | `admin@rukometnicentar.com` | `admin123` |
+| Manager | `manager@rukometnicentar.com` | `manager123` |
+| User | `user@rukometnicentar.com` | `user123` |
 
 ## Local setup
 
-1. Create a MySQL database named `rukometni_centar`.
-2. Import the SQL schema from `backend/sql/schema.sql`.
-3. Copy `backend/config/config.example.php` to `backend/config/config.php` and fill in your local database and secret values.
-4. Start the PHP server from the project root or serve the frontend from the `frontend` directory.
-5. Open the app in the browser.
+1. Import `database/rukometni_centar.sql` into MySQL. It creates the `rukometni_centar` database, all seven tables, and sample rows.
+2. Optionally copy `backend/config/config.example.php` to `backend/config/config.php` if you need local settings different from the defaults.
+3. Configure `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, and `DB_PASSWORD` in the environment or local config.
 
-Example local PHP server:
+`backend/config/config.php` is a private local override and must not be committed. The example configuration provides local development defaults.
 
-```bash
-cd frontend
-php -S localhost:8000
+The schema contains roles, users, teams, players, venues, matches, and standings. Foreign keys connect users to roles, players and standings to teams, and matches to their home team, away team, and venue. Unique and check constraints enforce account, roster, fixture, and standings integrity.
+
+The DAO layer provides prepared-statement CRUD operations through `BaseDao` and a table-specific DAO for each entity. The user list excludes password hashes; user lookup by email is intended for authentication code.
+
+Run the DAO smoke tests after importing the database and configuring MySQL:
+
+```powershell
+php backend/rest/dao/test.php
 ```
 
 ## Repository structure
@@ -82,10 +82,19 @@ backend/
     routes/
     services/
     dao/
+      BaseDao.php
+      RoleDao.php
+      UserDao.php
+      TeamDao.php
+      PlayerDao.php
+      VenueDao.php
+      MatchDao.php
+      StandingDao.php
+      test.php
     middleware/
-  sql/
-    schema.sql
   logs/
+database/
+  rukometni_centar.sql
 README.md
 AGENTS.md
 docs/
@@ -103,6 +112,12 @@ This milestone includes:
 - simplified SPA navigation
 - ERD/database model
 - project README and AI documentation files
+
+## Milestone 2 checklist
+
+- MySQL schema and bcrypt-hashed sample accounts in `database/rukometni_centar.sql`
+- Shared PDO connection and prepared-statement CRUD DAOs for all seven tables
+- DAO smoke test in `backend/rest/dao/test.php`
 
 ## Deployment and API docs
 
