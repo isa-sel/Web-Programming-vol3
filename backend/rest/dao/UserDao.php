@@ -54,4 +54,9 @@ final class UserDao extends BaseDao
 
         return $this->query_unique($sql, ['email' => $email]);
     }
+
+    public function count_by_role(int $roleId): int
+    {
+        return $this->count_where(['role_id' => $roleId]);
+    }
 }

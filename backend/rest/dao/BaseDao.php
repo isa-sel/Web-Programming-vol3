@@ -24,11 +24,7 @@ abstract class BaseDao
             return self::$connection;
         }
 
-        $configPath = dirname(__DIR__, 2) . '/config/config.php';
-        if (!is_file($configPath)) {
-            $configPath = dirname(__DIR__, 2) . '/config/config.example.php';
-        }
-        require_once $configPath;
+        self::loadConfig();
 
         $dsn = sprintf(
             'mysql:host=%s;port=%d;dbname=%s;charset=utf8mb4',
@@ -49,6 +45,20 @@ abstract class BaseDao
         );
 
         return self::$connection;
+    }
+
+    /** Loads the private config.php, or config.example.php when there is none. */
+    public static function loadConfig(): void
+    {
+        if (class_exists('Config', false)) {
+            return;
+        }
+
+        $configPath = dirname(__DIR__, 2) . '/config/config.php';
+        if (!is_file($configPath)) {
+            $configPath = dirname(__DIR__, 2) . '/config/config.example.php';
+        }
+        require_once $configPath;
     }
 
     protected function query(string $sql, array $parameters = []): PDOStatement
@@ -177,6 +187,47 @@ abstract class BaseDao
     public function rollback(): void
     {
         self::getConnection()->rollBack();
+    }
+
+    /**
+     * Rows whose columns equal the given values, e.g. ['team_id' => 2].
+     * Column names are checked against $columns; values are bound as parameters.
+     */
+    protected function find_where(array $conditions, ?string $orderBy = null): array
+    {
+        [$where, $parameters] = $this->buildWhere($conditions);
+        $sql = sprintf(
+            'SELECT %s FROM `%s` WHERE %s',
+            $this->quoteColumns($this->defaultColumns),
+            $this->table,
+            $where
+        );
+        if ($orderBy !== null) {
+            $sql .= sprintf(' ORDER BY `%s`', $this->only_columns([$orderBy])[0]);
+        }
+
+        return $this->query($sql, $parameters)->fetchAll();
+    }
+
+    protected function count_where(array $conditions): int
+    {
+        [$where, $parameters] = $this->buildWhere($conditions);
+        $sql = sprintf('SELECT COUNT(*) FROM `%s` WHERE %s', $this->table, $where);
+
+        return (int) $this->query($sql, $parameters)->fetchColumn();
+    }
+
+    private function buildWhere(array $conditions): array
+    {
+        $columns = $this->only_columns(array_keys($conditions));
+        $clauses = [];
+        $parameters = [];
+        foreach ($columns as $column) {
+            $clauses[] = sprintf('`%s` = :where_%s', $column, $column);
+            $parameters['where_' . $column] = $conditions[$column];
+        }
+
+        return [implode(' AND ', $clauses), $parameters];
     }
 
     protected function quoteColumns(array $columns): string

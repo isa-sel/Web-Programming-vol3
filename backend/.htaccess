@@ -1,7 +1,9 @@
 RewriteEngine On
 
-RewriteRule ^config(?:/|$) - [F,L]
+# Code, configuration, logs and Composer packages are never served directly
+RewriteRule ^(config|logs|vendor|utils|rest)(?:/|$) - [F,L]
 
+# Send every request that is not an existing file/folder to index.php (FlightPHP)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ index.php [QSA,L]

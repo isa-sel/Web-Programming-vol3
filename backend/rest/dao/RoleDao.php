@@ -10,4 +10,9 @@ final class RoleDao extends BaseDao
     protected array $columns = ['id', 'name', 'description', 'created_at'];
     protected array $writableColumns = ['name', 'description'];
     protected array $defaultColumns = ['id', 'name', 'description', 'created_at'];
+
+    public function get_by_name(string $name): ?array
+    {
+        return $this->find_where(['name' => $name])[0] ?? null;
+    }
 }

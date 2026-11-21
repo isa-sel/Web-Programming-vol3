@@ -5,7 +5,8 @@ This project is a handball league management web application built with PHP, MyS
 
 ## Tech stack
 - PHP
-- FlightPHP (required in later milestones)
+- FlightPHP (REST routing, installed with Composer)
+- swagger-php and Swagger UI (OpenAPI documentation)
 - MySQL
 - PDO
 - JavaScript
@@ -36,13 +37,26 @@ frontend/
   utils/
 
 backend/
-  index.php
+  index.php            FlightPHP entry point: services, error handler, routes, Flight::start()
   .htaccess
+  composer.json
+  composer.lock
+  vendor/              installed by Composer, never committed
   config/
     config.example.php
+  utils/
+    exceptions.php     HttpException and its 400/401/403/404/503 children
+    Validator.php      reusable validation methods
+    Logger.php         writes backend/logs/info.log and error.log
+  public/
+    v1/docs/
+      index.html       Swagger UI
+      swagger.php      generates the OpenAPI JSON
+      doc_setup.php    API info and schemas
+      paths/           one XxxPaths.php per routes file
   rest/
-    routes/
-    services/
+    routes/            one XxxRoutes.php per entity
+    services/          BaseService.php, one XxxService.php per entity, WeatherService.php, test.php
     dao/
       BaseDao.php
       RoleDao.php
@@ -72,13 +86,19 @@ README.md
 3. No mixing frontend and backend code in the same files.
 4. Use REST API endpoints for all data access.
 5. Use PDO for database queries.
-6. Use FlightPHP for API routing in later milestones.
+6. Use FlightPHP for API routing.
 7. Keep code modular and reusable.
 8. Store secrets and credentials in a local config file that is not committed to GitHub.
+9. Requests go route -> service -> DAO -> database. Routes never call DAO classes or write SQL; only services call DAOs, and services never write SQL.
+10. Every business rule lives in a service. A broken rule throws an exception from `backend/utils/exceptions.php`; routes contain no try/catch, the error handler in `backend/index.php` turns every exception into `{"error": "..."}` with its status code.
+11. Values the server calculates (standings `played` and `points`, password hashes) are never taken from the request.
+12. Every route has exactly one matching OpenAPI operation in `backend/public/v1/docs/paths/`; change both in the same commit.
+13. The external API (Open-Meteo weather) is called only from `WeatherService`, with a timeout; failures are logged and answered with 503.
 
 ## Naming conventions
 - JavaScript: camelCase
-- PHP: camelCase for methods, snake_case for DB fields
+- PHP: PascalCase for classes (TeamService, TeamDao; files are named after the class), camelCase for variables and properties, snake_case for DB fields
+- PHP methods: the CRUD and finder methods of DAOs and services use snake_case as in the course labs (`get_all`, `get_by_id`, `get_by_team`); connection and internal helpers use camelCase (`getConnection`, `loadConfig`)
 - SQL tables: snake_case
 - Files: descriptive lowercase names
 - Routes: lowercase and explicit
@@ -93,9 +113,11 @@ The project should have at least 5 entities such as:
 - venues
 - standings
 
-Every entity should support basic CRUD behavior in later milestones.
+Every entity supports CRUD through the REST API (Milestone 3).
 
 Milestone 2 database schema and seed data live in `database/rukometni_centar.sql`. Table DAOs extend `backend/rest/dao/BaseDao.php`; database credentials are read from the configuration class in `backend/config/config.example.php` or a private local `backend/config/config.php`.
+
+Milestone 3 services extend `backend/rest/services/BaseService.php`, receive their DAOs in the constructor and are registered once in `backend/index.php` (`Flight::register`). Do not change the database schema without asking first.
 
 ## Authentication and authorization
 - JWT must be used for authentication/authorization.

@@ -55,4 +55,19 @@ final class PlayerDao extends BaseDao
 
         return $this->query($sql)->fetchAll();
     }
+
+    public function get_by_team(int $teamId): array
+    {
+        return $this->find_where(['team_id' => $teamId], 'jersey_number');
+    }
+
+    public function get_by_team_and_jersey(int $teamId, int $jerseyNumber): ?array
+    {
+        return $this->find_where(['team_id' => $teamId, 'jersey_number' => $jerseyNumber])[0] ?? null;
+    }
+
+    public function count_by_team(int $teamId): int
+    {
+        return $this->count_where(['team_id' => $teamId]);
+    }
 }
