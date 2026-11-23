@@ -24,4 +24,9 @@ final class TeamDao extends BaseDao
         'category',
         'created_at',
     ];
+
+    public function get_by_name_and_city(string $name, string $city): ?array
+    {
+        return $this->find_where(['name' => $name, 'city' => $city])[0] ?? null;
+    }
 }

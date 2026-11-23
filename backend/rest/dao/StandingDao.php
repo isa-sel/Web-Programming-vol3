@@ -68,4 +68,25 @@ final class StandingDao extends BaseDao
 
         return $this->query_unique($sql, ['season' => $season]);
     }
+
+    /** The table of one season, ordered by position. */
+    public function get_by_season(string $season): array
+    {
+        return $this->find_where(['season' => $season], 'position');
+    }
+
+    public function get_by_team_and_season(int $teamId, string $season): ?array
+    {
+        return $this->find_where(['team_id' => $teamId, 'season' => $season])[0] ?? null;
+    }
+
+    public function get_by_season_and_position(string $season, int $position): ?array
+    {
+        return $this->find_where(['season' => $season, 'position' => $position])[0] ?? null;
+    }
+
+    public function count_by_team(int $teamId): int
+    {
+        return $this->count_where(['team_id' => $teamId]);
+    }
 }

@@ -35,4 +35,26 @@ final class Config
     {
         return self::environment('DB_PASSWORD', '');
     }
+
+    /** Open-Meteo needs no API key; only the URLs and the timeout are configured. */
+    public static function WEATHER_GEOCODING_URL(): string
+    {
+        return self::environment('WEATHER_GEOCODING_URL', 'https://geocoding-api.open-meteo.com/v1/search');
+    }
+
+    public static function WEATHER_FORECAST_URL(): string
+    {
+        return self::environment('WEATHER_FORECAST_URL', 'https://api.open-meteo.com/v1/forecast');
+    }
+
+    /** ISO country code used to find venue cities, e.g. BA for Bosnia and Herzegovina. */
+    public static function WEATHER_COUNTRY_CODE(): string
+    {
+        return self::environment('WEATHER_COUNTRY_CODE', 'BA');
+    }
+
+    public static function WEATHER_TIMEOUT_SECONDS(): int
+    {
+        return (int) self::environment('WEATHER_TIMEOUT_SECONDS', '5');
+    }
 }
